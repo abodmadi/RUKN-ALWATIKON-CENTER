@@ -262,8 +262,11 @@ const PatientPlanEditor = () => {
                     userData={{
                       docxId: plan._id,
                       patientId,
-                      filePath:
-                        plan.filePath || "physical-therapy-plan-defoult.docx",
+                      filePath: `${
+                        process.env.NEXT_PUBLIC_API_URL
+                      }/uploads/physical-therapy/plan/${
+                        plan.filePath || "physical-therapy-plan-defoult.docx"
+                      }`,
                       fileName:
                         plan.fileName || "physical-therapy-plan-defoult.docx",
                       docxName: `physical-therapy-plan-${patient.name}.docx`,
