@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { Icon } from "@iconify/react/dist/iconify.js";
-
+import FullProgramComponent from './FullProgramComponent';
 const AdminPatientProfileLayer = () => {
   const router = useRouter();
   const [patient, setPatient] = useState(null);
@@ -115,7 +115,7 @@ const AdminPatientProfileLayer = () => {
                 alt=""
                 className="border br-white border-width-2-px w-200-px h-200-px rounded-circle object-fit-cover"
               />
-              <h6 className="mb-0 mt-16">{name}</h6>
+              <h6 className="mb-0 mt-16 text-bg-danger">{name}</h6>
               <span className="text-secondary-light mb-16">{email}</span>
             </div>
             <div className="mt-24">
@@ -181,6 +181,20 @@ const AdminPatientProfileLayer = () => {
                   tabIndex={-1}
                 >
                   Change Password
+                </button>
+              </li>
+              <li className="nav-item" role="presentation">
+                <button
+                  className="nav-link d-flex align-items-center px-24"
+                  id="pills-full-program-tab"
+                  data-bs-toggle="pill"
+                  data-bs-target="#pills-full-program"
+                  type="button"
+                  role="tab"
+                  aria-controls="pills-full-program"
+                  aria-selected="false"
+                >
+                  Full Program
                 </button>
               </li>
             </ul>
@@ -331,7 +345,12 @@ const AdminPatientProfileLayer = () => {
                     </button>
                   </div>
                 </form>
-              </div>             
+              </div>    
+              
+            {/* Full Program */}
+<div className="tab-pane fade" id="pills-full-program" role="tabpanel" aria-labelledby="pills-full-program-tab">
+  <FullProgramComponent />
+</div> 
             </div>
           </div>
         </div>
