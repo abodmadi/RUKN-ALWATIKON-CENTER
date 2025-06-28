@@ -14,10 +14,7 @@ const Page = () => {
       {/* MasterLayout */}
       <MasterLayout>
         {/* Breadcrumb */}
-        <Breadcrumb 
-  heading="Calendar" 
-  title="Dashboard / Calendar" 
-/>
+        <Breadcrumb heading="Calendar" title="Dashboard / Calendar" />
 
         {/* CalendarMainLayer */}
         <CalendarMainLayer />

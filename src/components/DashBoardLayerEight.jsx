@@ -8,6 +8,7 @@ import LatestAppointmentsOne from "./child/LatestAppointmentsOne";
 import TotalIncome from "./child/TotalIncome";
 import AvailableTreatments from "./child/AvailableTreatments";
 import HealthReportsDocument from "./child/HealthReportsDocument";
+import AppointmentPage from "../app/appointments/page";
 
 const DashBoardLayerEight = () => {
   return (
@@ -15,6 +16,7 @@ const DashBoardLayerEight = () => {
       <div className="row gy-4">
         <div className="col-xxxl-9">
           <div className="row gy-4">
+            <AppointmentPage />
             {/* UnitCountSix */}
             <UnitCountSix />
             {/* Earning Statistic */}
