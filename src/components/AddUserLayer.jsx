@@ -1,38 +1,70 @@
 'use client';
 
-import { useState } from "react";
-import axios from "axios";  // To make HTTP requests
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
+import SuccessToast from './SuccessToast'; 
+import { useState } from 'react';
+
+//schema 
+const schema = yup.object().shape({
+  name: yup.string().required("Full name is required").min(2,"name must be at least 2 characters"),
+  email: yup.string().email("Invalid email").required("Email is required"),
+  password: yup.string().min(8, "Password must be at least 8 characters").required("Password is required"),
+  phone: yup
+    .string()
+    .required("Phone number is required")
+    .matches(/^\+\d{7,15}$/, "Enter a valid phone number"),
+  gender: yup.string().oneOf(["male", "female"], "Gender is required").required("Gender is required"),
+});
+
+
+
 
 const AddUserLayer = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [phone, setPhone] = useState("");
-  const [address, setAddress] = useState("");
-  const [gender, setGender] = useState("");
+  const router = useRouter();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const data = {
-      name,
-      email,
-      password,
-      phone,
-      address,
-      gender,
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+    mode: "onChange",
+  });
+const [showSuccess, setShowSuccess] = useState(false);
+  const onSubmit = async (data) => {
+    const payload = {
+      name: data.name,
+      email: data.email,
+      password: data.password,
+      gender: data.gender,
+      phone: data.phone,
     };
 
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/authentication/signup/patient`, data);
-      if (response.status === 201) {
-        alert("Patient added successfully");
-      }
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/authentication/signup/patient`, payload);
+     if (response.status === 201) {
+  setShowSuccess(true);     
+  reset();                  
+  setTimeout(() => {
+    router.push('/users-list'); 
+  }, 3000);
+}
+
     } catch (error) {
-      console.error("Error during patient registration:", error);
+      console.error("Error during registration:", error);
       alert("Error during registration. Please try again.");
     }
   };
+
 
   return (
     <div className='card h-100 p-0 radius-12'>
@@ -43,116 +75,88 @@ const AddUserLayer = () => {
               <div className='card-body'>
                 <h6 className='text-md text-primary-light mb-16'>Add Student</h6>
 
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit(onSubmit)} noValidate>
                   {/* Full Name */}
                   <div className='mb-20'>
-                    <label htmlFor='name' className='form-label fw-semibold text-primary-light text-sm mb-8'>
-                      Full Name <span className='text-danger-600'>*</span>
-                    </label>
+                    <label className='form-label'>Full Name</label>
                     <input
                       type='text'
-                      className='form-control radius-8'
-                      id='name'
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}  // Update state
+                      className={`form-control radius-8 ${errors.name ? 'border-danger' : ''}`}
                       placeholder='Enter Full Name'
+                      {...register("name")}
                     />
+                    {errors.name && <small className="text-danger">{errors.name.message}</small>}
                   </div>
 
                   {/* Email */}
                   <div className='mb-20'>
-                    <label htmlFor='email' className='form-label fw-semibold text-primary-light text-sm mb-8'>
-                      Email <span className='text-danger-600'>*</span>
-                    </label>
+                    <label className='form-label'>Email</label>
                     <input
                       type='email'
-                      className='form-control radius-8'
-                      id='email'
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}  // Update state
-                      placeholder='Enter email address'
+                      className={`form-control radius-8 ${errors.email ? 'border-danger' : ''}`}
+                      placeholder='Enter Email'
+                      {...register("email")}
                     />
+                    {errors.email && <small className="text-danger">{errors.email.message}</small>}
                   </div>
 
                   {/* Password */}
                   <div className='mb-20'>
-                    <label htmlFor='pass' className='form-label fw-semibold text-primary-light text-sm mb-8'>
-                      Password <span className='text-danger-600'>*</span>
-                    </label>
+                    <label className='form-label'>Password</label>
                     <input
                       type='password'
-                      className='form-control radius-8'
-                      id='pass'
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}  // Update state
+                      className={`form-control radius-8 ${errors.password ? 'border-danger' : ''}`}
                       placeholder='Enter Password'
+                      {...register("password")}
                     />
+                    {errors.password && <small className="text-danger">{errors.password.message}</small>}
                   </div>
 
-                  {/* Phone Number */}
+                  {/*  Phone Number with country selector */}
                   <div className='mb-20'>
-                    <label htmlFor='number' className='form-label fw-semibold text-primary-light text-sm mb-8'>
-                      Phone
-                    </label>
-                    <input
-                      type='tel'
-                      className='form-control radius-8'
-                      id='number'
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}  // Update state
-                      placeholder='Enter phone number'
+                    <label className='form-label'>Phone Number</label>
+                    <PhoneInput
+                      country={'ae'} 
+                      value={watch("phone")}
+                      onChange={(value) => setValue("phone", `+${value}`,{shouldValidate:true})}
+                      enableSearch={true}
+                      inputClass={`form-control w-100 ${errors.phone ? 'border-danger' : ''}`}
+                      specialLabel={null}
+                      inputStyle={{ borderRadius: '8px' }}
                     />
+                    {errors.phone && <small className="text-danger">{errors.phone.message}</small>}
                   </div>
 
-                  {/* Address */}
+                  {/* Gender */}
                   <div className='mb-20'>
-                    <label htmlFor='address' className='form-label fw-semibold text-primary-light text-sm mb-8'>
-                      Address
-                    </label>
-                    <textarea
-                      className='form-control radius-8'
-                      id='address'
-                      value={address}
-                      onChange={(e) => setAddress(e.target.value)}  // Update state
-                      placeholder='Write address...'
-                    />
+                    <label className='form-label'>Gender</label>
+                    <select
+                      className={`form-control radius-8 ${errors.gender ? 'border-danger' : ''}`}
+                      {...register("gender")}
+                    >
+                      <option value="">-- Select Gender --</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                    </select>
+                    {errors.gender && <small className="text-danger">{errors.gender.message}</small>}
                   </div>
 
-                  <div className="mb-20">
-  <label htmlFor="gender" className="form-label">gender</label>
-  <select
-    id="gender"
-    className="form-control radius-8"
-    value={gender}
-    onChange={e => setGender(e.target.value)}
-  >
-                          <option disabled value="">
-                        -- Select Gender --
-                      </option>
-    <option>male</option>
-    <option>female</option>
-  </select>
-</div>
-
-             
-
-                  <div className='d-flex align-items-center justify-content-center gap-3'>
+                  <div className='d-flex justify-content-between mt-4'>
                     <button
                       type='button'
-                      className='border border-danger-600 bg-hover-danger-200 text-danger-600 text-md px-56 py-11 radius-8'
-                      onClick={() => router.push('/users-list')}  // Redirect to users list
-
+                      className='btn btn-outline-danger'
+                      onClick={() => router.push('/users-list')}
                     >
                       Cancel
                     </button>
-                    <button
-                      type='submit'
-                      className='btn btn-primary border border-primary-600 text-md px-56 py-12 radius-8'
-                    >
+                    <button type='submit' className='btn btn-primary'>
                       Save
                     </button>
                   </div>
+
                 </form>
+                {showSuccess && <SuccessToast onClose={() => setShowSuccess(false)} />}
+
               </div>
             </div>
           </div>

@@ -7,6 +7,7 @@ import Breadcrumb from "@/components/Breadcrumb";
 import PublicProfilepatient from "@/components/PublicProfilepatient";
 import MasterLayout from "@/masterLayout/MasterLayout";
 import FullProgramComponent from "@/components/FullProgramComponent"
+import StudentForm from "@/components/StudentForm";
 
 export default function Page() {
   // --- Auth State & Header Handlers ---
@@ -123,6 +124,7 @@ export default function Page() {
         <Breadcrumb title="Your Profile" />
       {/* Page Content */}
         <PublicProfilepatient patientID={user?.id} />
+        
         {/* FullProgramcomponent */}
       {/* <FullProgramComponent patientId={user?.id}  /> */}
       {/* Login Modal */}
@@ -280,6 +282,7 @@ export default function Page() {
           }}
         />
       )}
+      <StudentForm/>
     </>
   );
 }

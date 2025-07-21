@@ -1,4 +1,5 @@
 import DashBoardLayerEight from "@/components/DashBoardLayerEight";
+import StudentForm from "@/components/StudentForm";
 import MasterLayout from "@/masterLayout/MasterLayout";
 import { Breadcrumb } from "react-bootstrap";
 
@@ -15,7 +16,7 @@ const Page = () => {
       <MasterLayout>
         {/* Breadcrumb */}
         <Breadcrumb title='RUKN ALWATIKON CENTER' />
-
+        <StudentForm/>
         {/* DashBoardLayerOne */}
         <DashBoardLayerEight />
       </MasterLayout>

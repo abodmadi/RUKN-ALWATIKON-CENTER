@@ -1,6 +1,7 @@
 import Breadcrumb from "@/components/Breadcrumb";
 import AdminPatientProfileLayer from "@/components/AdminPatientProfileLayer";
 import MasterLayout from "@/masterLayout/MasterLayout";
+import StudentForm from "@/components/StudentForm";
 
 export const metadata = {
   title: "WowDash NEXT JS - Admin Dashboard Multipurpose Bootstrap 5 Template",
@@ -23,6 +24,7 @@ const Page = () => {
 
         {/* ViewProfileLayer */}
         <AdminPatientProfileLayer />
+        {/* <StudentForm/> */}
       </MasterLayout>
     </>
   );
