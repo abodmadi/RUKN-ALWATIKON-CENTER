@@ -49,6 +49,7 @@ const SignInLayer = () => {
       };
 
       router.push(`http://localhost:3000${redirectMap[data.role] || "/"}`);
+      // document.cookie = `token=${token}; path=/; max-age=86400`;
     } catch (error) {
       console.error(error);
       alert("Login failed. Please check your credentials.");

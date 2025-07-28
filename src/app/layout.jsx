@@ -1,8 +1,12 @@
+// src/app/layout.js أو src/app/layout.jsx (بدون "use client")
 import PluginInit from "@/helper/PluginInit";
 import "./font.css";
 import "./globals.css";
 import { registerLicense } from "@syncfusion/ej2-base";
+import ProtectedWrapper from "@/components/ProtectedWrapper"; // جديد
+
 registerLicense(process.env.NEXT_PUBLIC_SYNCFUSION_LICENSE_KEY);
+
 export const metadata = {
   title: "WowDash NEXT JS - Admin Dashboard Multipurpose Bootstrap 5 Template",
   description:
@@ -13,7 +17,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <PluginInit />
-      <body suppressHydrationWarning={true}>{children}</body>
+      <body suppressHydrationWarning={true}>
+        <ProtectedWrapper>{children}</ProtectedWrapper>
+      </body>
     </html>
   );
 }

@@ -1,6 +1,4 @@
-// src/components/StudentForm.js
-
-"use client"; // لو بتشتغل في Next.js App Router
+"use client"; 
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
@@ -8,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
-// ✅ Validation Schema with Google Drive check
+//  validation schema 
 const schema = yup.object().shape({
   studentId: yup.string().required("Please select a student"),
   note: yup
@@ -18,7 +16,7 @@ const schema = yup.object().shape({
     .test("is-google-drive", "Note must be a Google Drive link", (value) => {
       if (!value) return false;
       
-      // Check for various Google Drive URL formats
+      // check google drive url validation 
       const googleDrivePatterns = [
         /^https:\/\/drive\.google\.com\/file\/d\/[a-zA-Z0-9_-]+/,
         /^https:\/\/docs\.google\.com\/document\/d\/[a-zA-Z0-9_-]+/,
@@ -48,7 +46,6 @@ const StudentForm = () => {
     mode: "onChange",
   });
 
-  // Watch the note field to check if it's valid
   const noteValue = watch("note");
   const isNoteValid = noteValue && !errors.note && noteValue.trim() !== "";
 
@@ -75,10 +72,9 @@ const StudentForm = () => {
       setIsSubmitting(true);
       console.log("Form submitted:", data);
       
-      // Simulate API call
+     
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Success feedback
       alert("Form submitted successfully!");
       reset();
       
